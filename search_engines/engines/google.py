@@ -1,7 +1,14 @@
 from ..engine import SearchEngine
 from ..config import PROXY, TIMEOUT, FAKE_USER_AGENT
 from ..utils import unquote_url
-from . import output as out
+
+
+class DateSearchToolValueError(Exception):
+    pass
+
+
+class DateSearchToolNotConfigured(Exception):
+    pass
 
 
 class Google(SearchEngine):
@@ -43,14 +50,12 @@ class Google(SearchEngine):
                 q_param = self._search_tools['date'].get(self._timeframe, None)
                 if not q_param:
                     msg = f"Unsupported value for Date Search Tool: {self._timeframe}"
-                    out.console(msg, level=out.Level.error)
-                    return {'url': None, 'data': None}
+                    raise DateSearchToolValueError(msg)
                 else:
                     date_q_param = f"&{q_param}"
             else:
                 msg = "Date Search Tool not configured"
-                out.console(msg, level=out.Level.error)
-                return {'url': None, 'data': None}
+                raise DateSearchToolNotConfigured(msg)
 
         url = u'{}/search?q={}{}'.format(
             self._base_url,
