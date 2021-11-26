@@ -12,18 +12,18 @@ except ImportError:
     from .libs.get_terminal_size import get_terminal_size
 
 from .utils import encode_str, decode_bytes
-from .libs import windows_cmd_encoding
 from .config import PYTHON_VERSION
 
 
 def print_results(search_engines):
     '''Prints the search results.'''
     for engine in search_engines:
-        console(engine.__class__.__name__ + u' results') 
+        console(engine.__class__.__name__ + u' results')
 
         for i, v in enumerate(engine.results, 1):
-            console(u'{:<4}{}'.format(i, v['link'])) 
+            console(u'{:<4}{}'.format(i, v['link']))
         console(u'')
+
 
 def create_csv_data(search_engines):
     '''CSV formats the search results.'''
@@ -33,23 +33,25 @@ def create_csv_data(search_engines):
     for engine in search_engines:
         for i in engine.results:
             row = [
-                engine._query, engine.__class__.__name__, 
+                engine._query, engine.__class__.__name__,
                 i['host'], i['link'], i['title'], i['text']
             ]
             row = [encoder(i) for i in row]
             data.append(row)
     return data
 
+
 def create_json_data(search_engines):
     '''JSON formats the search results.'''
     jobj = {
-        u'query': search_engines[0]._query, 
+        u'query': search_engines[0]._query,
         u'results': {
-            se.__class__.__name__: [i for i in se.results] 
+            se.__class__.__name__: [i for i in se.results]
             for se in search_engines
         }
     }
     return json.dumps(jobj)
+
 
 def create_html_data(search_engines):
     '''HTML formats the search results.'''
@@ -66,10 +68,11 @@ def create_html_data(search_engines):
                 data += HtmlTemplate.data.format(_replace_with_bold(query, v['text']))
             link = _replace_with_bold(query, v['link']) if u'url' in engine._filters else v['link']
             rows += HtmlTemplate.row.format(number=i, href=v['link'], link=link, data=data)
-        
+
         engine_name = engine.__class__.__name__
         tables += HtmlTemplate.table.format(engine=engine_name, rows=rows)
     return HtmlTemplate.html.format(query=query, table=tables)
+
 
 def _replace_with_bold(query, data):
     '''Places the query in <b> tags.'''
@@ -82,10 +85,10 @@ def write_file(data, path, encoding='utf-8'):
     '''Writes search results data to file.'''
     try:
         if PYTHON_VERSION == 2 and type(data) in (list, str):
-            f = io.open(path, 'wb') 
-        else: 
+            f = io.open(path, 'wb')
+        else:
             f = io.open(path, 'w', encoding=encoding, newline='')
-        
+
         if type(data) is list:
             writer = csv.writer(f)
             writer.writerows(data)
@@ -104,10 +107,11 @@ def console(msg, end='\n', level=None):
     msg = clear_line + (level or u'') + msg
     print(msg, end=end)
 
+
 Level = namedtuple('Level', ['info', 'warning', 'error'])(
-    info = u'INFO ',
-    warning = u'WARNING ',
-    error = u'ERROR '
+    info=u'INFO ',
+    warning=u'WARNING ',
+    error=u'ERROR '
 )
 
 PRINT = 'print'
@@ -123,11 +127,11 @@ class HtmlTemplate:
     <meta charset="UTF-8">
     <title>Search Results</title>
     <style>
-    body {{ background-color:#f5f5f5; font-family:Italic, Charcoal, sans-serif; }} 
-    a:link {{ color: #262626; }} 
-    a:visited {{ color: #808080; }} 
-    th {{ font-size:17px; text-align:left; padding:3px; font-style: italic; }} 
-    td {{ font-size:14px; text-align:left; padding:1px; }} 
+    body {{ background-color:#f5f5f5; font-family:Italic, Charcoal, sans-serif; }}
+    a:link {{ color: #262626; }}
+    a:visited {{ color: #808080; }}
+    th {{ font-size:17px; text-align:left; padding:3px; font-style: italic; }}
+    td {{ font-size:14px; text-align:left; padding:1px; }}
     </style>
     </head>
     <body>
@@ -154,4 +158,3 @@ class HtmlTemplate:
     </tr>
     '''
     data = u'''<tr><td></td><td>{}</td></tr>'''
-
