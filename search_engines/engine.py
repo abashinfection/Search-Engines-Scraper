@@ -36,7 +36,7 @@ class SearchEngine(object):
         '''Returns the appropriate CSS selector.'''
         raise NotImplementedError()
 
-    def _first_page(self):
+    def _first_page(self, timeframe=None):
         '''Returns the initial page URL.'''
         raise NotImplementedError()
 

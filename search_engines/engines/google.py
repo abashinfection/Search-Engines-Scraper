@@ -45,9 +45,6 @@ class Google(SearchEngine):
         '''Returns the initial page and query.'''
         date_q_param = ''
 
-        print(f"timeframe: {timeframe}")
-        print(f"self._search_tools: {self._search_tools}")
-
         if timeframe:
             if 'date' in self._search_tools:
                 q_param = self._search_tools['date'].get(timeframe, None)
