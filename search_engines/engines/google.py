@@ -16,11 +16,11 @@ class Google(SearchEngine):
         self.set_headers({'User-Agent': FAKE_USER_AGENT})
         self._set_search_tools({
             'date': {
-                '1h': 'qdr:h',
-                '1d': 'qdr:d',
-                '1w': 'qdr:w',
-                '1m': 'qdr:m',
-                '1y': 'qdr:y'
+                '1h': 'tbs=qdr:h',
+                '1d': 'tbs=qdr:d',
+                '1w': 'tbs=qdr:w',
+                '1m': 'tbs=qdr:m',
+                '1y': 'tbs=qdr:y'
             }
         })
 
