@@ -12,7 +12,7 @@ from . import config as cfg
 class SearchEngine(object):
     '''The base class for all Search Engines.'''
 
-    def __init__(self, proxy=cfg.PROXY, timeout=cfg.TIMEOUT, timeframe=None):
+    def __init__(self, proxy=cfg.PROXY, timeout=cfg.TIMEOUT):
         '''
         :param str proxy: optional, a proxy server
         :param int timeout: optional, the HTTP timeout
@@ -20,7 +20,6 @@ class SearchEngine(object):
         self._http_client = HttpClient(timeout, proxy)
         self._delay = (1, 4)
         self._query = ''
-        self._timeframe = timeframe
         self._filters = []
         self._search_tools = {}
 
@@ -166,7 +165,7 @@ class SearchEngine(object):
         '''
         out.console('Searching {}'.format(self.__class__.__name__))
         self._query = utils.decode_bytes(query)
-        request = self._first_page()
+        request = self._first_page(timeframe=timeframe)
 
         for page in range(1, pages + 1):
             try:

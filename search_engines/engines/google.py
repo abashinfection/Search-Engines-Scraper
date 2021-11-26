@@ -14,7 +14,7 @@ class DateSearchToolNotConfigured(Exception):
 class Google(SearchEngine):
     '''Searches google.com'''
 
-    def __init__(self, proxy=PROXY, timeout=TIMEOUT, timeframe=None):
+    def __init__(self, proxy=PROXY, timeout=TIMEOUT):
         super(Google, self).__init__(proxy, timeout)
         self._base_url = 'https://www.google.com'
         self._delay = (2, 6)
@@ -41,15 +41,18 @@ class Google(SearchEngine):
         }
         return selectors[element]
 
-    def _first_page(self):
+    def _first_page(self, timeframe=None):
         '''Returns the initial page and query.'''
         date_q_param = ''
 
-        if self._timeframe:
+        print(f"timeframe: {timeframe}")
+        print(f"self._search_tools: {self._search_tools}")
+
+        if timeframe:
             if 'date' in self._search_tools:
-                q_param = self._search_tools['date'].get(self._timeframe, None)
+                q_param = self._search_tools['date'].get(timeframe, None)
                 if not q_param:
-                    msg = f"Unsupported value for Date Search Tool: {self._timeframe}"
+                    msg = f"Unsupported value for Date Search Tool: {timeframe}"
                     raise DateSearchToolValueError(msg)
                 else:
                     date_q_param = f"&{q_param}"
