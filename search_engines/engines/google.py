@@ -1,14 +1,8 @@
 from ..engine import SearchEngine
 from ..config import PROXY, TIMEOUT, FAKE_USER_AGENT
 from ..utils import unquote_url
-
-
-class DateSearchToolValueError(Exception):
-    pass
-
-
-class DateSearchToolNotConfigured(Exception):
-    pass
+from ..utils import DateSearchToolValueError
+from ..utils import DateSearchToolNotConfigured
 
 
 class Google(SearchEngine):
