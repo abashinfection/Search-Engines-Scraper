@@ -1,18 +1,27 @@
 from ..engine import SearchEngine
 from ..config import PROXY, TIMEOUT, FAKE_USER_AGENT
 from ..utils import unquote_url
+from . import output as out
 
 
 class Google(SearchEngine):
     '''Searches google.com'''
 
-    def __init__(self, proxy=PROXY, timeout=TIMEOUT):
+    def __init__(self, proxy=PROXY, timeout=TIMEOUT, timeframe=None):
         super(Google, self).__init__(proxy, timeout)
         self._base_url = 'https://www.google.com'
         self._delay = (2, 6)
         self._current_page = 1
-
         self.set_headers({'User-Agent': FAKE_USER_AGENT})
+        self._set_search_tools({
+            'date': {
+                '1h': 'qdr:h',
+                '1d': 'qdr:d',
+                '1w': 'qdr:w',
+                '1m': 'qdr:m',
+                '1y': 'qdr:y'
+            }
+        })
 
     def _selectors(self, element):
         '''Returns the appropriate CSS selector.'''
@@ -27,7 +36,27 @@ class Google(SearchEngine):
 
     def _first_page(self):
         '''Returns the initial page and query.'''
-        url = u'{}/search?q={}'.format(self._base_url, self._query)
+        date_q_param = ''
+
+        if self._timeframe:
+            if 'date' in self._search_tools:
+                q_param = self._search_tools['date'].get(self._timeframe, None)
+                if not q_param:
+                    msg = f"Unsupported value for Date Search Tool: {self._timeframe}"
+                    out.console(msg, level=out.Level.error)
+                    return {'url': None, 'data': None}
+                else:
+                    date_q_param = f"&{q_param}"
+            else:
+                msg = "Date Search Tool not configured"
+                out.console(msg, level=out.Level.error)
+                return {'url': None, 'data': None}
+
+        url = u'{}/search?q={}{}'.format(
+            self._base_url,
+            self._query,
+            date_q_param
+        )
         return {'url': url, 'data': None}
 
     def _next_page(self, tags):
