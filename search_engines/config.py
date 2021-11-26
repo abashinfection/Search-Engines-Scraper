@@ -14,8 +14,8 @@ TIMEOUT = 10
 # Default User-Agent string
 USER_AGENT = 'search_engines/0.5 Repo: https://github.com/tasos-py/Search-Engines-Scraper'
 
-# Fake User-Agent string - Google desn't like the default user-agent
-FAKE_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:84.0) Gecko/20100101 Firefox/84.0'
+# Fake User-Agent string
+FAKE_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
 
 # Proxy server
 PROXY = None
