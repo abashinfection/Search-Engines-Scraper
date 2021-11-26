@@ -1,5 +1,5 @@
 from ..engine import SearchEngine
-from ..config import PROXY, TIMEOUT
+from ..config import PROXY, TIMEOUT, FAKE_USER_AGENT
 from ..utils import DateSearchToolValueError
 from ..utils import DateSearchToolNotConfigured
 
@@ -11,7 +11,7 @@ class Duckduckgo(SearchEngine):
         super(Duckduckgo, self).__init__(proxy, timeout)
         self._base_url = 'https://html.duckduckgo.com/html/'
         self.set_headers({
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
+            'User-Agent': FAKE_USER_AGENT,
             'Content-Type': 'application/x-www-form-urlencoded'
         })
         self._set_search_tools({
