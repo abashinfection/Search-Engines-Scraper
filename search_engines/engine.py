@@ -12,7 +12,7 @@ from . import config as cfg
 class SearchEngine(object):
     '''The base class for all Search Engines.'''
 
-    def __init__(self, proxy=cfg.PROXY, timeout=cfg.TIMEOUT):
+    def __init__(self, proxy=cfg.PROXY, timeout=cfg.TIMEOUT, timeframe=None):
         '''
         :param str proxy: optional, a proxy server
         :param int timeout: optional, the HTTP timeout
@@ -20,7 +20,9 @@ class SearchEngine(object):
         self._http_client = HttpClient(timeout, proxy)
         self._delay = (1, 4)
         self._query = ''
+        self._timeframe = timeframe
         self._filters = []
+        self._search_tools = {}
 
         self.results = SearchResults()
         '''The search results.'''
@@ -122,6 +124,15 @@ class SearchEngine(object):
         out.console(msg, level=out.Level.error)
         return False
 
+    def _set_search_tools(self, search_tools={}):
+        '''Configures engine's search tools, such as Date, based on the provided parameters.
+        NOTE: this routine is intended to be used by subclasses to configure the proper map
+        for search tools.
+
+        :param date: dict A dictionary mapping search tools to the proper query parameter
+        '''
+        self._search_tools = search_tools
+
     def set_headers(self, headers):
         '''Sets HTTP headers.
 
@@ -145,11 +156,12 @@ class SearchEngine(object):
             else:
                 self._filters += [operator]
 
-    def search(self, query, pages=cfg.SEARCH_ENGINE_RESULTS_PAGES):
+    def search(self, query, pages=cfg.SEARCH_ENGINE_RESULTS_PAGES, timeframe=None):
         '''Queries the search engine, goes through the pages and collects the results.
 
         :param query: str The search query
         :param pages: int Optional, the maximum number of results pages to search
+        :param timeframe: str Optional, the timeframe identifier for Date Search Tool
         :returns SearchResults object
         '''
         out.console('Searching {}'.format(self.__class__.__name__))
