@@ -59,14 +59,14 @@ class Qwant(SearchEngine):
         '''Processes and filters the search results.'''
         tags = loads(soup.get_text())['data']['result']['items']['mainline']
         tags = [j for i in tags for j in i['items'] if i['type'] != u'ads']
-        results = [self._item(l) for l in tags]
+        results = [self._item(elem) for elem in tags]
 
         if u'url' in self._filters:
-            results = [l for l in results if self._query_in(l['link'])]
+            results = [elem for elem in results if self._query_in(elem['link'])]
         if u'title' in self._filters:
-            results = [l for l in results if self._query_in(l['title'])]
+            results = [elem for elem in results if self._query_in(elem['title'])]
         if u'text' in self._filters:
-            results = [l for l in results if self._query_in(l['text'])]
+            results = [elem for elem in results if self._query_in(elem['text'])]
         if u'host' in self._filters:
-            results = [l for l in results if self._query_in(domain(l['link']))]
+            results = [elem for elem in results if self._query_in(domain(elem['link']))]
         return results
