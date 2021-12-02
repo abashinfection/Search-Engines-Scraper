@@ -3,6 +3,7 @@ from json import loads
 from ..engine import SearchEngine
 from ..config import PROXY, TIMEOUT
 from ..utils import unquote_url
+from ..utils import domain
 
 
 class Qwant(SearchEngine):
@@ -67,5 +68,5 @@ class Qwant(SearchEngine):
         if u'text' in self._filters:
             results = [l for l in results if self._query_in(l['text'])]
         if u'host' in self._filters:
-            results = [l for l in results if self._query_in(utils.domain(l['link']))]
+            results = [l for l in results if self._query_in(domain(l['link']))]
         return results
