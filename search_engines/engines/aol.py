@@ -10,11 +10,6 @@ class Aol(Yahoo):
         self._base_url = u'https://search.aol.com'
         self._set_search_tools({
             'date': {
-                '1h': 'tbs=qdr:h',
-                '1d': 'tbs=qdr:d',
-                '1w': 'tbs=qdr:w',
-                '1m': 'tbs=qdr:m',
-                '1y': 'tbs=qdr:y'
             }
         })
 
